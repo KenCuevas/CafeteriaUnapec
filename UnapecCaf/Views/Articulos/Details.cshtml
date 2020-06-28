@@ -1,13 +1,12 @@
 ﻿@model UnapecCaf.Models.Articulos
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "Detalles";
 }
 
-<h2>Details</h2>
+<h2>Detalles de los registros</h2>
 
 <div>
-    <h4>Articulos</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -61,6 +60,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Editar", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Volver", "Index")
 </p>
