@@ -15,9 +15,10 @@ namespace UnapecCaf.Controllers
         private CafetDB db = new CafetDB();
 
         // GET: Proveedores
-        public ActionResult Index()
+        public ActionResult Index(string Busqueda = null)
         {
-            return View(db.Proveedores.ToList());
+            return View(db.Proveedores.Where(p => Busqueda == null ||
+                              p.NombreComercial.Contains(Busqueda)).ToList());
         }
 
         // GET: Proveedores/Details/5
@@ -57,7 +58,7 @@ namespace UnapecCaf.Controllers
 
             return View(proveedores);
         }
-
+        [Authorize(Roles = "Administrador, Consulta")]
         // GET: Proveedores/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -88,7 +89,7 @@ namespace UnapecCaf.Controllers
             }
             return View(proveedores);
         }
-
+        [Authorize(Roles = "Administrador")]
         // GET: Proveedores/Delete/5
         public ActionResult Delete(int? id)
         {

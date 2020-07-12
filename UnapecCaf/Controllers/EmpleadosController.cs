@@ -15,13 +15,15 @@ namespace UnapecCaf.Controllers
         private CafetDB db = new CafetDB();
 
         // GET: Empleados
-        public ActionResult Index()
+        public ActionResult Index(string Busqueda = null)
         {
-            return View(db.Empleados.ToList());
+            return View(db.Empleados.Where(p => Busqueda == null ||
+                              p.Nombre.Contains(Busqueda) ||
+                              p.Cedula.StartsWith(Busqueda)).ToList());
         }
 
-        // GET: Empleados/Details/5
-        public ActionResult Details(int? id)
+            // GET: Empleados/Details/5
+            public ActionResult Details(int? id)
         {
             if (id == null)
             {
@@ -57,7 +59,7 @@ namespace UnapecCaf.Controllers
 
             return View(empleados);
         }
-
+        [Authorize(Roles = "Administrador, Consulta")]
         // GET: Empleados/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -88,7 +90,7 @@ namespace UnapecCaf.Controllers
             }
             return View(empleados);
         }
-
+        [Authorize(Roles = "Administrador")]
         // GET: Empleados/Delete/5
         public ActionResult Delete(int? id)
         {

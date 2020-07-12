@@ -15,9 +15,11 @@ namespace UnapecCaf.Controllers
         private CafetDB db = new CafetDB();
 
         // GET: Cafeterias
-        public ActionResult Index()
+        public ActionResult Index(string Busqueda = null)
         {
-            return View(db.Cafeterias.ToList());
+            return View(db.Cafeterias.Where(p => Busqueda == null ||
+                              p.Descripcion.Contains(Busqueda)).ToList()
+            );
         }
 
         // GET: Cafeterias/Details/5
@@ -59,7 +61,7 @@ namespace UnapecCaf.Controllers
 
             return View(cafeterias);
         }
-
+        [Authorize(Roles = "Administrador, Consulta")]
         // GET: Cafeterias/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -92,7 +94,7 @@ namespace UnapecCaf.Controllers
             }
             return View(cafeterias);
         }
-
+        [Authorize(Roles = "Administrador")]
         // GET: Cafeterias/Delete/5
         public ActionResult Delete(int? id)
         {

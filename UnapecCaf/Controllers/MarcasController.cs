@@ -15,9 +15,11 @@ namespace UnapecCaf.Controllers
         private CafetDB db = new CafetDB();
 
         // GET: Marcas
-        public ActionResult Index()
+        public ActionResult Index(string Busqueda = null)
         {
-            return View(db.Marcas.ToList());
+            return View(db.Marcas.Where(p => Busqueda == null ||
+                              p.NombreEmpresa.Contains(Busqueda) ||
+                              p.Descripcion.StartsWith(Busqueda)).ToList());
         }
 
         // GET: Marcas/Details/5
@@ -57,7 +59,7 @@ namespace UnapecCaf.Controllers
 
             return View(marca);
         }
-
+        [Authorize(Roles = "Administrador, Consulta")]
         // GET: Marcas/Edit/5
         public ActionResult Edit(int? id)
         {
@@ -90,6 +92,7 @@ namespace UnapecCaf.Controllers
         }
 
         // GET: Marcas/Delete/5
+        [Authorize(Roles = "Administrador")]
         public ActionResult Delete(int? id)
         {
             if (id == null)
