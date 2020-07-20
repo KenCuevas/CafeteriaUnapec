@@ -80,9 +80,11 @@ namespace UnapecCaf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,NombreComercial,RNC,FechaRegistro,Estado")] Proveedores proveedores)
-        {
+        {   
+            if (!ValidaRNC(Proveedores))
+                ModelState.AddModelError("RNC", "RCN invalido" )
             if (ModelState.IsValid)
-            {
+            { 
                 db.Entry(proveedores).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
@@ -123,6 +125,29 @@ namespace UnapecCaf.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        private bool esUnRNCValido(string pRNC)
+        {
+            int vnTotal = 0;
+            int[] digitoMult = new int[8] { 7, 9, 8, 6, 5, 4, 3, 2 };
+            string vcRNC = pRNC.Replace("-", "").Replace(" ", "");
+            string vDigito = vcRNC.Substring(8, 1);
+            if (vcRNC.Length.Equals(9))
+                if (!"145".Contains(vcRNC.Substring(0, 1)))
+                    return false;
+
+            for (int vDig = 1; vDig <= 8; vDig++)
+            {
+                int vCalculo = Int32.Parse(vcRNC.Substring(vDig - 1, 1)) * digitoMult[vDig - 1];
+                vnTotal += vCalculo;
+            }
+
+            if (vnTotal % 11 == 0 && vDigito == "1" || vnTotal % 11 == 1 && vDigito == "1" ||
+                (11 - (vnTotal % 11)).Equals(vDigito))
+                return true;
+            else
+                return false;
         }
     }
 }
