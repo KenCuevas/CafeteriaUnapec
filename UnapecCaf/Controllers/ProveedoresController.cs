@@ -80,9 +80,9 @@ namespace UnapecCaf.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,NombreComercial,RNC,FechaRegistro,Estado")] Proveedores proveedores)
-        {   
-            if (!ValidaRNC(Proveedores))
-                ModelState.AddModelError("RNC", "RCN invalido" )
+        {
+            if (!esUnRNCValido(proveedores.RNC))
+                ModelState.AddModelError("RNC", "RCN invalido");
             if (ModelState.IsValid)
             { 
                 db.Entry(proveedores).State = EntityState.Modified;
